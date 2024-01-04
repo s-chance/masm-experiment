@@ -16,7 +16,7 @@ START:
 PRINT_LOOP:
     ; 输出数字0-100
     MOV AX, counter
-    MOV DI, OFFSET buffer + 3
+    MOV DI, OFFSET buffer + 4
     MOV BX, 10
 
 CONVERT_LOOP:
