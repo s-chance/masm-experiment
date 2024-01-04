@@ -55,6 +55,7 @@ START:
     LEA DI, arrayB
     CALL CONVERT_TO_DIGIT
     MOV [lenB], CH
+    XOR CH, CH
 
     ; 交集
     LEA SI, arrayA
