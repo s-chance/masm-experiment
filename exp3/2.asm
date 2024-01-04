@@ -25,7 +25,7 @@ START:
 READ_BITS:
     MOV AH, 1
     INT 21H
-    CMP AL, 8 ; 回车键
+    CMP AL, 8 ; 退格键
     JZ BACKSPACE
     MOV [DI], AL
     INC DI
@@ -47,20 +47,19 @@ CONTINUE:
     MOV CX, 4
     MOV SI, OFFSET bits
 CONVERT_BITS:
-    SHL AL, 1
+    SHL AL, 1 ; 左移一位
     MOV BL, [SI]
     CMP BX, '0'
     JB ERROR
     CMP BL, '1'
     JA ERROR
     SUB BL, '0'
-    ADD AL, BL
+    ADD AL, BL ; 加上当前位的值
     XOR BX, BX
     INC SI
     LOOP CONVERT_BITS
-    MOV char, AL
-
     
+    MOV char, AL ; 保存输入的字符
     CALL CRLF
     CALL CHAR_TO_D
     CALL CRLF

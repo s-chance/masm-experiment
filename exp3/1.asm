@@ -22,9 +22,9 @@ START:
     INT 21H
     MOV char, AL
     CALL CRLF
-    CALL CHAR_TO_D
+    CALL CHAR_TO_D ; 转十进制后输出
     CALL CRLF
-    CALL CHAR_TO_H
+    CALL CHAR_TO_H ; 转十六进制后输出
     
     MOV AX, 4C00H
     INT 21H
@@ -36,7 +36,7 @@ CHAR_TO_D PROC ; 转十进制后输出
     MOV BL, 100
     DIV BL
     CMP AL, 0
-    JZ SKIP_HUNDRED
+    JZ SKIP_HUNDRED ; 针对2位数处理
     ADD AL, '0'
     MOV [DI], AL ; 百位数
     INC DI
@@ -46,7 +46,7 @@ SKIP_HUNDRED:
     MOV BL, 10
     DIV BL
     CMP AL, 0
-    JZ SKIP_TEN
+    JZ SKIP_TEN ; 针对1位数处理
     ADD AL, '0'
     MOV [DI], AL ; 十位数
     INC DI
@@ -70,7 +70,7 @@ CHAR_TO_H PROC ; 转十六进制后输出
     MOV AL, char
     MOV BL, 16
     DIV BL
-    CMP AL, 10
+    CMP AL, 10 ; 判断是否为十六进制字母
     JB IS_DIGIT1
     SUB AL, 10
     ADD AL, 'A'
@@ -80,7 +80,7 @@ IS_DIGIT1:
 CONTINUE1:
     MOV [DI], AL ; 十位数
     INC DI
-    CMP AH, 10
+    CMP AH, 10 ; 判断是否为十六进制字母
     JB IS_DIGIT2
     SUB AH, 10
     ADD AH, 'A'
