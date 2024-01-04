@@ -1,5 +1,5 @@
 DATA SEGMENT
-    msg DB 'Please input a num(0<n<10): $'
+    msg DB 'Please input a num(0<n<=10): $'
     err DB 'Error: Please input a number between 1 and 10! $'
     tip DB 'input the array(use a space to spilt different number): $'
     res DB 'The sum is: $'

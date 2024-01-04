@@ -32,44 +32,44 @@ START:
 
     MOV BX, OFFSET string + 2 ; 初始化BX为字符串首地址
 AGAIN:
-    MOV AL, [BX]
-    CMP AL, '$'
-    JZ PRINT
-    CMP AL, ' '
+    MOV AL, [BX] ; 取出当前字符
+    CMP AL, '$' ; 判断是否到字符串结尾
+    JZ PRINT ; 到结尾则输出结果
+    CMP AL, ' ' ; 判断是否为空格
     JZ SPACE
-    CMP AL, 'A'
-    JB DIGIT
+    CMP AL, 'A' ; 判断是否为大写字母
+    JB DIGIT ; 小于A则判断是否为数字
     CMP AL, 'Z'
-    JA NEXT
-    INC upperNum
-    INC BX
+    JA NEXT ; 大于Z则判断是否为小写字母
+    INC upperNum ; 确认为大写字母，计数器加一
+    INC BX ; BX指向下一个字符
     JMP AGAIN
 
 DIGIT:
-    CMP AL, '0'
-    JB OTHER
-    CMP AL, '9'
+    CMP AL, '0' ; 判断是否为数字
+    JB OTHER ; 小于0则判断是否为其他字符
+    CMP AL, '9' ; 大于9则判断是否为其它字符
     JA OTHER
-    INC digitNum
+    INC digitNum ; 确认为数字，计数器加一
     INC BX
     JMP AGAIN
 
 SPACE:
-    INC spaceNum
+    INC spaceNum ; 确认为空格，计数器加一
     INC BX
     JMP AGAIN
 
 OTHER:
-    INC otherNum
+    INC otherNum ; 确认为其他字符，计数器加一
     INC BX
     JMP AGAIN
     
 NEXT:
-    CMP AL, 'a'
-    JB OTHER
+    CMP AL, 'a' ; 判断是否为小写字母
+    JB OTHER ; 小于a则判断是否为其他字符
     CMP AL, 'z'
-    JA  OTHER
-    INC lowerNum
+    JA  OTHER ; 大于z则判断是否为其他字符
+    INC lowerNum ; 确认为小写字母，计数器加一
     INC BX
     JMP AGAIN
 
@@ -77,35 +77,35 @@ PRINT:
     MOV DX, OFFSET upper
     MOV AH, 9
     INT 21H
-    MOV AX, upperNum
+    MOV AX, upperNum ; 输出大写字母字符个数
     CALL PRINT_NUMBER
     CALL PRINT_NEWLINE
     
     MOV DX, OFFSET lower
     MOV AH, 9
     INT 21H
-    MOV AX, lowerNum
+    MOV AX, lowerNum ; 输出小写字母字符个数
     CALL PRINT_NUMBER
     CALL PRINT_NEWLINE
 
     MOV DX, OFFSET digits
     MOV AH, 9
     INT 21H
-    MOV AX, digitNum
+    MOV AX, digitNum ; 输出数字字符个数
     CALL PRINT_NUMBER
     CALL PRINT_NEWLINE
     
     MOV DX, OFFSET spaces
     MOV AH, 9
     INT 21H
-    MOV AX, spaceNum
+    MOV AX, spaceNum ; 输出空格字符个数
     CALL PRINT_NUMBER
     CALL PRINT_NEWLINE
 
     MOV DX, OFFSET others
     MOV AH, 9
     INT 21H
-    MOV AX, otherNum
+    MOV AX, otherNum ; 输出其他字符个数
     CALL PRINT_NUMBER
     CALL PRINT_NEWLINE
 
@@ -114,7 +114,7 @@ DONE:
     INT 21H
 
 PRINT_NUMBER PROC
-    MOV DI, OFFSET buffer + 3
+    MOV DI, OFFSET buffer + 4
     MOV BX, 10
 
 DIVIDE_LOOP:
