@@ -11,7 +11,7 @@ DATA SEGMENT
          DB '=======================', 13, 10
          DB 'Please input your choice: $'
     choice DB 2, ?, 2 DUP('$')
-    err DB 'Invalid input$'
+    err DB 'Invalid input', 13, 10, '$'
     newline DB 13, 10, '$'
     location DB 3 DUP('$')
     insertMsg DB 'Please input the location to insert: $'
@@ -109,10 +109,16 @@ SEARCH_PROC PROC
 LOOP_CMP:
     MOV AL, [SI] ; 加载StrA的当前字符
     CMP AL, [DI] ; 比较StrA和StrB的当前字符
-    JNE NEXT_CHAR ; 如果不匹配，跳转到下一个字符
-
-    INC DI ; 如果匹配，增加目标索引
+    JZ NEXT_CHAR ; 如果匹配，跳转到下一个字符
+    MOV DI, OFFSET StrB + 2; 如果不匹配重置目标索引
+    CMP AL, [DI] ; 重新比较
+    JZ NEXT_CHAR ; 如果匹配，跳转到下一个字符
+    INC SI ; 增加源索引
+    INC CX ; 更新计数器
+    JMP CONTINUE ; 继续查找
+    
 NEXT_CHAR:
+    INC DI ; 如果匹配，增加目标索引
     INC SI ; 增加源索引
     INC CX ; 更新计数器
     CMP BYTE PTR [DI], 0DH ; 检查是否已经到达StrB的末尾
@@ -148,6 +154,7 @@ END_P:
     RET
 SEARCH_PROC ENDP
 ERROR2:
+    CALL PRINT_NEWLINE
     LEA DX, err
     MOV AH, 9
     INT 21H
